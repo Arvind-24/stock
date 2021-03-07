@@ -1,5 +1,6 @@
 import pandas_datareader as web
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import math
 import pickle
@@ -26,10 +27,10 @@ for tick in tickers:
         print("All good")
 
 
-    px['26 ema'] = pd.ewma(px[tick], span=26)
-    px['12 ema'] = pd.ewma(px[tick], span=12)
+    px['26 ema'] = px[tick].ewm(span=26).mean()
+    px['12 ema'] = px[tick].ewm(span=12).mean()
     px['MACD'] = (px['12 ema'] - px['26 ema'])
-    px['Signal'] = pd.ewma((px['12 ema'] - px['26 ema']), span=9)
+    px['Signal'] = px['MACD'].ewm(span=9).mean()
     px['Diff'] = (px['MACD'] - px['Signal'])
 
     diff_list = []
